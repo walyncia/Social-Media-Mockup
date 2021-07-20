@@ -28,3 +28,8 @@ class AbstractUserAccount_DOA( ABC ):
     def search_users_bynumber(self, Number):
         pass
 
+    @abstractmethod
+    def is_user_exists(self, user):
+        pass
+
+
