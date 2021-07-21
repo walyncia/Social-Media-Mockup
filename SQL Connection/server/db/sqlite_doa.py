@@ -16,7 +16,8 @@ class SQL_DOA( AbstractUserAccount_DOA):
             c.execute('INSERT INTO UserData ( Name, Username, Password, Email, Number, Join_Date ) VALUES (?,?,?,?,?,?);', data)
             conn.commit()
             conn.close()
-        #return Username
+            return False
+        return user
 
 
     def update_User(self, user, Username):
@@ -24,7 +25,14 @@ class SQL_DOA( AbstractUserAccount_DOA):
 
 
     def delete_User(self, Username):
-        pass
+        conn = sqlite3.connect(self.dbfile)
+        c = conn.cursor()
+        userID = Username
+        print(userID)
+        c.execute(' DELETE FROM UserData WHERE Username=?;', (Username,))
+        conn.commit()
+        conn.close()
+        return f'Sorry to see you go, {Username}!'
 
 
     def select_User(self, Username):
@@ -45,7 +53,7 @@ class SQL_DOA( AbstractUserAccount_DOA):
     def is_user_exists(self, user):
         conn = sqlite3.connect(self.dbfile)
         c = conn.cursor()
-        c.execute('select * from UserData where Email=?', (user["Email"],))
+        c.execute('select * from UserData where Email=? or Username=?', (user["Email"],user["Username"],))
         rows =c.fetchone()
         if rows:
             return True
@@ -54,13 +62,14 @@ class SQL_DOA( AbstractUserAccount_DOA):
 
 if __name__ == '__main__':
     doa = SQL_DOA('SocialMedia.db')
-    user = dict()
-    user['Name'] = 'Lyncia Brown'
-    user['Username'] = 'BrownLyn'
-    user['Password'] = '43nkCDJ2@@.!9'
-    user['Email'] = "brownL12@yahoo.com"
-    user['Number'] = "3024932300"
-    user['Join_Date'] = "12/06/2017"
-    print(doa.insert_User(user))
+    # user = dict()
+    # user['Name'] = 'Lyncia Brown'
+    # user['Username'] = 'Brown32_Lyn'
+    # user['Password'] = '43nkCDJ2@@.!9'
+    # user['Email'] = "brownL12@yahoo.com"
+    # user['Number'] = "3024932300"
+    # user['Join_Date'] = "12/06/2017"
+    # print(doa.insert_User(user))
+    print(doa.delete_User('Brown32_Lyn'))
     #print(doa.select_User('Remyting29'))
     #print(doa.is_user_exists(user))
